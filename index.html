@@ -3,234 +3,293 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>DCT Slide Generator</title>
+<title>DCT Slide Generator — 5 Designs</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f4f5f7; min-height: 100vh; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #111; color: #fff; min-height: 100vh; }
 
-  .header { background: #1a2e4a; padding: 16px 20px; border-bottom: 3px solid #c8a96e; }
-  .header h1 { color: #fff; font-size: 16px; font-weight: 600; }
-  .header p { color: #a0b0c0; font-size: 11px; margin-top: 3px; }
+.header { background: #1a2e4a; padding: 16px 20px; border-bottom: 3px solid #c8a96e; }
+.header h1 { color: #fff; font-size: 16px; font-weight: 700; }
+.header p { color: #a0b0c0; font-size: 11px; margin-top: 3px; }
 
-  .controls { background: #fff; padding: 16px 20px; border-bottom: 1px solid #e0e0da; }
-  .controls label { display: block; font-size: 12px; color: #555; font-weight: 600; margin-bottom: 6px; }
-  .controls input {
-    width: 100%; border: 1px solid #d0d0ca; border-radius: 8px;
-    padding: 10px 14px; font-size: 14px; outline: none;
-    font-family: monospace; -webkit-text-security: disc;
-    margin-bottom: 10px;
-  }
-  .controls input:focus { border-color: #1a2e4a; }
-  .key-note { font-size: 10px; color: #aaa; margin-bottom: 12px; }
+.controls { background: #1e1e1e; padding: 16px 20px; border-bottom: 1px solid #333; }
+.controls label { display: block; font-size: 11px; color: #888; font-weight: 600; margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase; }
+.controls input {
+  width: 100%; border: 1px solid #444; border-radius: 8px; background: #2a2a2a;
+  padding: 10px 14px; font-size: 14px; outline: none; color: #fff;
+  font-family: monospace; margin-bottom: 10px;
+}
+.controls input:focus { border-color: #c8a96e; }
+.key-note { font-size: 10px; color: #555; margin-bottom: 12px; }
+.btn-gen {
+  width: 100%; background: #E8583A; color: #fff; border: none;
+  border-radius: 8px; padding: 14px; font-size: 15px; font-weight: 700;
+  cursor: pointer; letter-spacing: 0.5px;
+}
+.btn-gen:disabled { background: #555; cursor: not-allowed; }
 
-  .btn-gen {
-    width: 100%; background: #1a2e4a; color: #fff; border: none;
-    border-radius: 8px; padding: 14px; font-size: 15px; font-weight: 600;
-    cursor: pointer; -webkit-tap-highlight-color: transparent;
-  }
-  .btn-gen:disabled { background: #8a9ab0; }
+.progress-bar-wrap { height: 3px; background: #222; }
+.progress-bar-fill { height: 3px; background: #c8a96e; width: 0%; transition: width 0.4s; }
+.status { padding: 8px 20px; font-size: 11px; color: #666; background: #1a1a1a; border-bottom: 1px solid #222; min-height: 28px; }
 
-  .progress-bar-wrap { height: 3px; background: #e8eaf0; }
-  .progress-bar-fill { height: 3px; background: #c8a96e; width: 0%; transition: width 0.4s; }
-  .status { padding: 8px 20px; font-size: 11px; color: #888; background: #fafafa; border-bottom: 1px solid #ececec; min-height: 28px; }
+.main { padding: 20px; max-width: 1000px; margin: 0 auto; }
 
-  .main { padding: 20px; max-width: 900px; margin: 0 auto; }
+.design-block { margin-bottom: 48px; }
+.design-label { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.design-num { width: 28px; height: 28px; border-radius: 50%; background: #E8583A; color: #fff; font-size: 12px; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.design-name { font-size: 13px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
+.design-desc { font-size: 10px; color: #666; margin-top: 2px; }
 
-  .variant { margin-bottom: 32px; }
-  .variant-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 2px solid #1a2e4a; }
-  .variant-name { font-size: 12px; font-weight: 700; color: #1a2e4a; letter-spacing: 0.06em; text-transform: uppercase; }
-  .pill { background: #c8a96e; color: #fff; font-size: 9px; padding: 2px 7px; border-radius: 20px; font-weight: 700; }
-  .variant-desc { font-size: 11px; color: #888; margin-bottom: 10px; font-style: italic; }
+.img-box {
+  width: 100%; aspect-ratio: 16/9; border-radius: 10px; overflow: hidden;
+  background: #1a2e4a; display: flex; align-items: center; justify-content: center;
+  border: 1px solid #333;
+}
+.img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.placeholder { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.placeholder-txt { color: rgba(255,255,255,0.2); font-size: 12px; }
+.spinner { width: 28px; height: 28px; border: 2.5px solid rgba(255,255,255,0.1); border-top-color: #c8a96e; border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.err-box { padding: 20px; text-align: center; }
+.err-msg { color: #f08080; font-size: 11px; margin-bottom: 10px; }
+.btn-retry { background: transparent; border: 1px solid #c8a96e; color: #c8a96e; padding: 6px 14px; border-radius: 6px; font-size: 11px; cursor: pointer; }
 
-  .img-box {
-    width: 100%; aspect-ratio: 16/9; border-radius: 8px; border: 1px solid #ddd;
-    background: #1a2e4a; overflow: hidden; display: flex; align-items: center; justify-content: center;
-    position: relative;
-  }
-  .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.dl-row { margin-top: 8px; }
+.btn-dl {
+  width: 100%; background: transparent; border: 1px solid #444; color: #aaa;
+  padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;
+}
+.btn-dl:disabled { opacity: 0.2; cursor: not-allowed; }
+.btn-dl:not(:disabled) { border-color: #c8a96e; color: #c8a96e; }
 
-  .placeholder { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-  .placeholder-txt { color: rgba(255,255,255,0.3); font-size: 12px; }
-  .spinner { width: 28px; height: 28px; border: 2.5px solid rgba(255,255,255,0.15); border-top-color: #c8a96e; border-radius: 50%; animation: spin 0.8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .err-box { padding: 20px; text-align: center; }
-  .err-msg { color: #f08080; font-size: 11px; margin-bottom: 10px; }
-  .btn-retry { background: transparent; border: 1px solid #c8a96e; color: #c8a96e; padding: 6px 14px; border-radius: 6px; font-size: 11px; cursor: pointer; }
-
-  .dl-row { margin-top: 8px; }
-  .btn-dl {
-    width: 100%; background: transparent; border: 1px solid #1a2e4a; color: #1a2e4a;
-    padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .btn-dl:disabled { opacity: 0.3; }
-
-  .divider { border: none; border-top: 1px solid #e0e0da; margin: 24px 0; }
+.divider { border: none; border-top: 1px solid #222; margin: 32px 0; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>DCT Abu Dhabi — Slide Generator</h1>
-  <p>AI-rendered · 2 design variants · gpt-image-2</p>
+  <h1>DCT Abu Dhabi — Leadership Slide Generator</h1>
+  <p>5 design options · gpt-image-2 · DCT brand</p>
 </div>
 
 <div class="controls">
   <label>OpenAI API Key</label>
   <input type="password" id="apikey" placeholder="sk-…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-  <div class="key-note">Your key stays in this browser tab and is only sent to OpenAI.</div>
-  <button class="btn-gen" id="btnGen" onclick="startGen()">Generate Both Variants</button>
+  <div class="key-note">Your key stays in this tab and is only sent to OpenAI.</div>
+  <button class="btn-gen" id="btnGen" onclick="startGen()">Generate All 5 Designs</button>
 </div>
 
 <div class="progress-bar-wrap"><div class="progress-bar-fill" id="pBar"></div></div>
 <div class="status" id="statusTxt">Paste your OpenAI key and tap Generate.</div>
 
-<div class="main">
-
-  <div class="variant">
-    <div class="variant-header">
-      <span class="variant-name">Variant A</span>
-      <span class="pill">ANALYTICAL</span>
-    </div>
-    <div class="variant-desc">Transparent disclosure — "Here is how we recalibrated." 3-pillar methodology is primary.</div>
-    <div class="img-box" id="fA"><div class="placeholder"><div class="placeholder-txt">Waiting…</div></div></div>
-    <div class="dl-row"><button class="btn-dl" id="dlA" disabled onclick="dlImg('A')">↓ Download Variant A</button></div>
-  </div>
-
-  <hr class="divider">
-
-  <div class="variant">
-    <div class="variant-header">
-      <span class="variant-name">Variant B</span>
-      <span class="pill">DEFENSIBILITY</span>
-    </div>
-    <div class="variant-desc">Conclusion-led — "Here is why the new number is credible." Signals converge into a validated range.</div>
-    <div class="img-box" id="fB"><div class="placeholder"><div class="placeholder-txt">Waiting…</div></div></div>
-    <div class="dl-row"><button class="btn-dl" id="dlB" disabled onclick="dlImg('B')">↓ Download Variant B</button></div>
-  </div>
-
-</div>
+<div class="main" id="slideGrid"></div>
 
 <script>
-const store = { A: null, B: null };
+const store = {};
 let done = 0;
+const TOTAL = 5;
 
-const STYLE = `Style input: Create the slide as a single polished image in a strict 16:9 aspect ratio. Make it executive-ready, text-rich, and strategically structured, with dense but legible content and clear business language. The output should look like a professional strategy presentation slide — not a website, dashboard, or app screen. Use the image model to generate the slide directly; do not use HTML, CSS, or browser-style UI elements. Build the slide around one dominant visual framework only. Leave generous whitespace for a strong action title at the top as a conclusion-oriented headline. Do not include a subtitle. Visual identity: deep navy (#1a2e4a) as dominant structural colour, gold/sand (#c8a96e) as accent, white for primary text, light grey for secondary labels. Government tourism authority slide — authoritative, restrained, data-grounded.`;
+const DCT_STYLE = `Visual identity rules — follow strictly:
+- Background: warm cream (#EDE5D8) OR DCT coral (#E8583A) as dominant panel colour
+- Accent: DCT coral (#E8583A) for highlights on cream slides; cream/white on coral slides
+- Secondary colours allowed: deep navy (#1a2e4a), hot pink/crimson (#D4175A), forest green (#1A7A4A), near-black (#1a1a1a)
+- DCT geometric ornament: interlocking circles and diamond shape, top-right corner of slide
+- Typography: bold, heavy weight, large scale — this is a leadership slide not a report
+- Do NOT use generic blue/grey corporate palette — must look like DCT Abu Dhabi brand
+- Icons: clean line icons for each signal (globe for recovery, plane for connectivity, speech bubble with bars for sentiment)
+- No bullet lists — use visual hierarchy, cards, icons, large numbers
+- Conclusion: always a dark (#1a1a1a) box with large coral number showing the revision impact`;
 
-const PROMPTS = {
-  A: `Content input:
+const BASE_CONTENT = `
+Two-block structure:
 
-Action title: "Post-conflict recalibration: new recovery targets are grounded in four global precedents and three demand signals"
+BLOCK 1 — KPIs and target revision (prominent, visual, large numbers):
+• Overnight guests: XX total (International: XX · Domestic: XX) — Old target XX → New target XX → Change: -XX%
+• Hotel revenue: AED XX — Old target AED XX → New target AED XX → Change: -XX%  
+• Occupancy rate: XX% — Old target XX% → New target XX% → Change: -XX%
+Show as large hero numbers with clear before/after delta. Negative changes are the story — make them visible.
 
-Framing: This slide presents revised KPI targets for Abu Dhabi tourism following regional conflict impact and explains the three-pillar methodology used to derive them. Audience is DCT leadership. Two blocks stacked vertically.
+BLOCK 2 — Why: three demand signals that drove the downward revision:
+Signal 1 — Recovery curves (globe icon): Thailand, Japan, Tunisia, Egypt showed 12–30% visitor decline in Year 1 post-conflict. AUH trajectory sits within their band. → calibrates pace of decline
+Signal 2 — Seat connectivity (plane icon): Inbound airline seat supply into AUH contracted sharply post-conflict. Hard ceiling on arrivals. → sets volume ceiling
+Signal 3 — Net sentiment (speech bubble icon): Destination sentiment fell across GCC, Europe, South Asia. Demand suppression confirmed. → validates demand drop
 
-BLOCK 1 — METRICS COMPARISON (top half, two columns):
-Left: Current performance — Overnight guests total: XX (International: XX | Domestic: XX) · Hotel revenue: AED XX
-Right: Target revision table — Metric | Old Target | New Target | Change
-• Overnight guests: XX → XX | -XX%
-• International: XX → XX | -XX%
-• Domestic: XX → XX | -XX%
-• Hotel revenue: XX → XX | -XX%
-Delta column in gold. Negative deltas in muted red.
+Conclusion box: All three signals confirm the same verdict — targets revised down -XX% from original. Dark background, large coral number, authoritative.
 
-BLOCK 2 — METHODOLOGY (bottom half, three-pillar):
-Label: "Demand-Signal Triangulation Framework"
-Pillar 1 — Recovery curves: Thailand, Japan, Tunisia, Egypt post-conflict visitor curves. AUH trajectory within their recovery band.
-Pillar 2 — Seat connectivity: Forward airline seat supply into AUH. Primary leading indicator for international overnight volume.
-Pillar 3 — Net sentiment: Destination sentiment index across GCC, Europe, South Asia. Feeds demand forecasting assumptions.
-Three-column pillar visual with icons, named inputs, directional impact arrows.
+Company: Department of Culture and Tourism — Abu Dhabi (DCT Abu Dhabi)
+Presentation title top-left or bottom footer. Date: 2026.`;
 
-Company reference: Department of Culture and Tourism — Abu Dhabi (DCT Abu Dhabi)
+const DESIGNS = [
+  {
+    id: 1,
+    name: "Magazine Split",
+    desc: "Coral full-bleed left panel · cream right · oversized type",
+    prompt: `Design 1 — MAGAZINE ASYMMETRIC SPLIT layout.
 
-${STYLE}`,
+Action title: "Recovery targets reset: conflict-adjusted revision grounded in three demand signals"
 
-  B: `Content input:
+Layout: Strong vertical split. LEFT HALF: full coral (#E8583A) panel, giant white KPI numbers stacked vertically with ghost large text behind them, "TARGETS RESET 2026" as oversized hero type. RIGHT HALF: cream (#EDE5D8) background, three numbered signal rows (01, 02, 03) each with coloured left border bar (coral, crimson, green), icon circle, signal name in large bold, one punchy line of text, small impact tag pill. Bottom of right: large dark conclusion box spanning full width with coral -XX% in 80px weight. DCT geometric ornament top-right. Magazine editorial energy — asymmetric, bold, breathing room, strong visual tension.
 
-Action title: "Revised targets are credible: benchmark-validated recovery curves, seat supply, and market sentiment converge on the same range"
+${BASE_CONTENT}
+${DCT_STYLE}`
+  },
+  {
+    id: 2,
+    name: "Tiled Grid",
+    desc: "6-card grid · dark background · coloured KPI tiles",
+    prompt: `Design 2 — TILED CARD GRID layout.
 
-Framing: This slide argues the new post-conflict tourism targets are defensible. Three independently-derived demand signals corroborate each other. Metrics block is evidence; methodology block is the warrant. Audience is DCT leadership.
+Action title: "Three signals confirmed the same verdict — targets revised down across all KPIs"
 
-BLOCK 1 — METRICS COMPARISON (top half, two columns):
-Left: Baseline actuals — Overnight guests: XX (International: XX | Domestic: XX) · Hotel revenue: AED XX
-Right: Old Target → New Target (post-conflict adjustment)
-• Overnight guests: XX → XX (Δ -XX%)
-• International: XX → XX (Δ -XX%)
-• Domestic: XX → XX (Δ -XX%)
-• Hotel revenue: XX → XX (Δ -XX%)
-Annotation box: "New targets sit within the observed recovery band of comparable precedent markets."
-Gold accent for delta column. Label: "Post-conflict adjustment."
+Layout: Dark near-black (#1a1a1a) full-bleed background. TOP ROW: three large KPI cards side by side — Card 1 coral (#E8583A) with overnight guests hero number; Card 2 dark navy with hotel revenue; Card 3 cream with occupancy. Each card has: metric label small top, giant number centre, thin divider, "Was XX → Now XX" small below, large delta bottom in contrasting colour. BOTTOM ROW: three signal cards (smaller) each with coloured top border, round icon, signal name, one-line descriptor, impact arrow label. FAR RIGHT bottom: coral conclusion tile with -XX% massive and "all signals aligned" small. DCT ornament top right on dark bg. Bold grid energy, data-forward.
 
-BLOCK 2 — THREE CONVERGING SIGNALS (bottom half):
-Convergence funnel — three signals pointing into a single "Conflict-Adjusted Recovery Range" output box.
-Signal 1 — Recovery trajectories: Thailand, Japan, Tunisia, Egypt. AUH curve overlaps median recovery path.
-Signal 2 — Seat connectivity: Forward seat supply contracted sharply. Hard ceiling on arrivals confirmed.
-Signal 3 — Net sentiment: Fell across GCC, Europe, South Asia. Demand suppression confirmed.
-Output box (gold border, dark background): "All three signals confirm a -XX% revision from pre-conflict target."
+${BASE_CONTENT}
+${DCT_STYLE}`
+  },
+  {
+    id: 3,
+    name: "Diagonal Drama",
+    desc: "Diagonal colour split · bold left KPIs · signal cards right",
+    prompt: `Design 3 — DIAGONAL COLOUR SPLIT layout.
 
-Company reference: Department of Culture and Tourism — Abu Dhabi (DCT Abu Dhabi)
+Action title: "Post-conflict recalibration: all three demand signals point to the same downward revision"
 
-${STYLE}`
-};
+Layout: A bold diagonal cut from top-left to bottom-right splits the slide. UPPER-LEFT TRIANGLE: coral (#E8583A) fill, white oversized KPI numbers, "REVISED TARGETS" in huge ghost type behind real numbers, delta pills as dark rounded rectangles. LOWER-RIGHT TRIANGLE: cream (#EDE5D8) fill, three signal cards arranged diagonally following the cut, each card with coloured accent border, icon, name, one line. A dark conclusion box anchors the bottom-right corner with large coral -XX%. DCT geometric ornament in cream area top-right. Dramatic, high-contrast, unexpected visual energy.
+
+${BASE_CONTENT}
+${DCT_STYLE}`
+  },
+  {
+    id: 4,
+    name: "Editorial Strips",
+    desc: "Horizontal band layout · dark header · coloured KPI strip · signal strip",
+    prompt: `Design 4 — HORIZONTAL EDITORIAL STRIPS layout.
+
+Action title: "Targets reset — three independent signals confirmed the conflict impact"
+
+Layout: Slide divided into three horizontal bands stacked:
+BAND 1 (top, ~20% height): near-black (#1a1a1a) strip. Left: "DCT ABU DHABI · LEADERSHIP REVIEW 2026" small label. Centre: "TARGETS RESET." in large bold white + coral. DCT ornament right.
+BAND 2 (middle, ~35% height): Four coloured KPI blocks side by side spanning full width. Block 1 coral: overnight guests giant number + delta. Block 2 crimson (#D4175A): hotel revenue. Block 3 navy: occupancy. Block 4 dark: summary "All KPIs revised down" with -XX% large coral.
+BAND 3 (bottom, ~45% height): Cream (#EDE5D8) strip. Three signal columns side by side, each with large coloured number (01/02/03), icon, signal name bold, one-line descriptor, impact tag. Clean, structured, editorial newspaper layout energy.
+
+${BASE_CONTENT}
+${DCT_STYLE}`
+  },
+  {
+    id: 5,
+    name: "Hero Number",
+    desc: "Single dominant -XX% hero · supporting data around it",
+    prompt: `Design 5 — HERO NUMBER CENTRED layout.
+
+Action title: "Three signals. One verdict. Targets cut."
+
+Layout: Coral (#E8583A) full-bleed background. The slide is built AROUND a single enormous central number: "-XX%" in massive white type (the overall revision) — this is the visual hero, centre of the slide, impossible to miss. Around it:
+TOP: "DCT ABU DHABI · TARGETS RESET 2026" small label top-left. DCT ornament top-right.
+LEFT of hero number: Three KPI blocks stacked vertically — overnight guests, hotel revenue, occupancy — each as a dark pill/card with white metric name, white number, cream delta. Clean vertical stack.
+RIGHT of hero number: Three signal icons stacked vertically — globe (recovery curves), plane (seat connectivity), speech bubble (sentiment) — each with icon, name, one-line descriptor in white. Clean vertical stack mirroring left.
+BOTTOM: Dark (#1a1a1a) footer bar spanning full width: "All three signals confirm: targets revised -XX% from original · conflict-adjusted baseline · quarterly review" in small white type.
+Maximum visual impact — the number IS the message.
+
+${BASE_CONTENT}
+${DCT_STYLE}`
+  }
+];
+
+// Build slide grid
+const grid = document.getElementById('slideGrid');
+DESIGNS.forEach((d, i) => {
+  const block = document.createElement('div');
+  block.className = 'design-block';
+  block.innerHTML = `
+    <div class="design-label">
+      <div class="design-num">${d.id}</div>
+      <div>
+        <div class="design-name">${d.name}</div>
+        <div class="design-desc">${d.desc}</div>
+      </div>
+    </div>
+    <div class="img-box" id="f${d.id}">
+      <div class="placeholder"><div class="placeholder-txt">Waiting…</div></div>
+    </div>
+    <div class="dl-row">
+      <button class="btn-dl" id="dl${d.id}" disabled onclick="dlImg(${d.id})">↓ Download Design ${d.id}</button>
+    </div>
+    ${i < DESIGNS.length - 1 ? '<div class="divider"></div>' : ''}
+  `;
+  grid.appendChild(block);
+});
 
 async function startGen() {
   const key = document.getElementById('apikey').value.trim();
-  if (!key) { setStatus(0, '⚠ Paste your OpenAI API key first.'); return; }
+  if (!key) { setStatus(0, '⚠ Paste your OpenAI key first.'); return; }
   done = 0;
   document.getElementById('btnGen').disabled = true;
-  setStatus(0, 'Generating both variants in parallel…');
-  setLoading('A'); setLoading('B');
-  await Promise.allSettled([gen('A', key), gen('B', key)]);
-  const msg = done === 2 ? '✓ Both variants ready. Tap a download button to save.' : 'Done. Check any errors and retry if needed.';
+  setStatus(0, 'Generating all 5 designs in parallel…');
+  DESIGNS.forEach(d => setLoading(d.id));
+
+  // Batch: fire all 5 at once
+  await Promise.allSettled(DESIGNS.map(d => gen(d.id, d.prompt, key)));
+
+  const msg = done === TOTAL
+    ? `✓ All ${TOTAL} designs ready. Tap any download button to save.`
+    : `Done — ${done}/${TOTAL} generated. Retry any that failed.`;
   setStatus(100, msg);
   document.getElementById('btnGen').disabled = false;
 }
 
-async function gen(v, key, isRetry = false) {
-  setLoading(v);
+async function gen(id, prompt, key, isRetry = false) {
+  setLoading(id);
   try {
     const res = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'gpt-image-2', prompt: PROMPTS[v], n: 1, size: '1536x864', quality: 'medium' })
+      body: JSON.stringify({ model: 'gpt-image-2', prompt, n: 1, size: '1536x864', quality: 'medium' })
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      if (res.status === 401) { setErr(v, 'Invalid API key — check and retry.'); setStatus(null, '✗ Invalid API key.'); document.getElementById('btnGen').disabled = false; return; }
-      if (res.status === 429 && !isRetry) { await new Promise(r => setTimeout(r, 2500)); return gen(v, key, true); }
+      if (res.status === 401) {
+        DESIGNS.forEach(d => setErr(d.id, 'Invalid API key.', d.prompt, key));
+        setStatus(null, '✗ Invalid API key — check and retry.');
+        document.getElementById('btnGen').disabled = false;
+        return;
+      }
+      if (res.status === 429 && !isRetry) {
+        await new Promise(r => setTimeout(r, 3000));
+        return gen(id, prompt, key, true);
+      }
       throw new Error(err.error?.message || `HTTP ${res.status}`);
     }
     const data = await res.json();
     const url = `data:image/png;base64,${data.data[0].b64_json}`;
-    store[v] = url;
-    setImg(v, url);
+    store[id] = url;
+    setImg(id, url);
     done++;
-    setStatus(Math.round((done/2)*100), `Generated ${done} of 2 variants…`);
+    setStatus(Math.round((done / TOTAL) * 100), `Generated ${done} of ${TOTAL} designs…`);
   } catch(e) {
-    setErr(v, e.message || 'Unknown error — tap Retry.');
+    setErr(id, e.message || 'Unknown error — tap Retry.', prompt, key);
   }
 }
 
-function setLoading(v) {
-  document.getElementById(`f${v}`).innerHTML = `<div class="placeholder"><div class="spinner"></div><div class="placeholder-txt">Generating Variant ${v}…</div></div>`;
-  document.getElementById(`dl${v}`).disabled = true;
+function setLoading(id) {
+  document.getElementById(`f${id}`).innerHTML = `<div class="placeholder"><div class="spinner"></div><div class="placeholder-txt">Generating design ${id}…</div></div>`;
+  document.getElementById(`dl${id}`).disabled = true;
 }
-function setImg(v, url) {
-  document.getElementById(`f${v}`).innerHTML = `<img src="${url}" alt="Variant ${v}">`;
-  document.getElementById(`dl${v}`).disabled = false;
+function setImg(id, url) {
+  document.getElementById(`f${id}`).innerHTML = `<img src="${url}" alt="Design ${id}">`;
+  document.getElementById(`dl${id}`).disabled = false;
 }
-function setErr(v, msg) {
-  document.getElementById(`f${v}`).innerHTML = `<div class="err-box"><div class="err-msg">✗ ${msg}</div><button class="btn-retry" onclick="gen('${v}', document.getElementById('apikey').value.trim())">Retry</button></div>`;
+function setErr(id, msg, prompt, key) {
+  document.getElementById(`f${id}`).innerHTML = `<div class="err-box"><div class="err-msg">✗ ${msg}</div><button class="btn-retry" onclick="gen(${id}, DESIGNS[${id-1}].prompt, document.getElementById('apikey').value.trim())">Retry Design ${id}</button></div>`;
 }
 function setStatus(pct, msg) {
   if (pct !== null) document.getElementById('pBar').style.width = pct + '%';
   if (msg) document.getElementById('statusTxt').textContent = msg;
 }
-function dlImg(v) {
-  if (!store[v]) return;
+function dlImg(id) {
+  if (!store[id]) return;
   const a = document.createElement('a');
-  a.href = store[v];
-  a.download = `dct_slide_variant_${v}.png`;
+  a.href = store[id];
+  a.download = `dct_design_${id}.png`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
