@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>DCT Slide 6 — Bubble KPIs + Signal Charts</title>
+<title>DCT Slide 6 — 6 Options</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f0f0f; color: #fff; min-height: 100vh; }
@@ -44,14 +44,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 </head>
 <body>
 <div class="header">
-  <h1>DCT Slide 6 — Proportional Bubbles + Signal Charts</h1>
-  <p>Bubble SIZE carries the meaning · 2 colour variants · gpt-image-2</p>
+  <h1>DCT Slide 6 — 6 Visual Options</h1>
+  <p>Same content · same bubble logic · 6 completely different visual treatments · gpt-image-2</p>
 </div>
 <div class="controls">
   <label>OpenAI API Key</label>
   <input type="password" id="apikey" placeholder="sk-…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
   <div class="key-note">Sent only to OpenAI · not stored anywhere</div>
-  <button class="btn-gen" id="btnGen" onclick="startGen()">Generate Both Variants</button>
+  <button class="btn-gen" id="btnGen" onclick="startGen()">Generate All 6 Options</button>
 </div>
 <div class="progress-bar-wrap"><div class="progress-bar-fill" id="pBar"></div></div>
 <div class="status" id="statusTxt">Paste your OpenAI key and tap Generate.</div>
@@ -60,180 +60,181 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 <script>
 const store = {};
 let done = 0;
-const TOTAL = 2;
+const TOTAL = 6;
 
-const BUBBLE_LOGIC = `
-CRITICAL BUBBLE SIZING RULE — this is the core visual principle:
-Bubble SIZE must be PROPORTIONAL to the number it represents. The old target was LARGER than the new target. Therefore the OLD TARGET bubble must be VISIBLY BIGGER than the NEW TARGET bubble. The size difference communicates the downward revision instantly — no text needed. A viewer should look at the two bubbles and immediately understand "the old target was bigger, the new target is smaller." This is the entire point of using bubbles instead of numbers in boxes.
+const CORE_CONTENT = `
+BUBBLE SIZING — THE CORE RULE:
+Bubble SIZE must be proportional to the number. Old target was HIGHER, so OLD TARGET BUBBLE IS BIGGER. New target is lower, so NEW TARGET BUBBLE IS SMALLER. The SIZE difference communicates the downward revision without reading a single number. This is non-negotiable.
 
-Specifically:
-- OLD TARGET overnight guests bubble: the LARGEST circle on the left panel (biggest number = biggest circle)
-- NEW TARGET overnight guests bubble: noticeably SMALLER — sits beside the old one at same height
-- OLD TARGET hotel revenue bubble: second-largest pair
-- NEW TARGET hotel revenue bubble: smaller than its old pair
-- Child bubbles (INTL and DOM): always smaller than their parent, but also sized relative to each other (International is usually larger than Domestic, so international child bubble is bigger)
+LEFT SIDE CONTENT — KPI BUBBLES:
 
-The visual hierarchy tells the story: big old bubble → smaller new bubble → even smaller children branching below.`;
+OVERNIGHT GUESTS — two parent bubbles side by side at same height:
+• OLD TARGET bubble (LARGER): grey-navy fill, person icon, number "XX" bold white, label "OLD TARGET" above
+• NEW TARGET bubble (SMALLER): coral fill, person icon, number "XX" bold white, label "NEW TARGET" above
+• From OLD TARGET bubble bottom: two child bubbles hang below connected by lines:
+  - Left child: "INTL XX" (old international target)
+  - Right child: "DOM XX" (old domestic target)
+• From NEW TARGET bubble bottom: two child bubbles hang below:
+  - Left child: "INTL XX" (new international target, coral outline)
+  - Right child: "DOM XX" (new domestic target, coral outline)
+• Child bubbles proportionally sized to each other
+• Delta annotation between the pair: "▼ -XX%"
 
-const LAYOUT = `
-EXACT SLIDE LAYOUT — 16:9 ratio:
+HOTEL REVENUE — two parent bubbles side by side:
+• OLD TARGET (LARGER): grey-navy, hotel/building icon, "AED XX"
+• NEW TARGET (SMALLER): coral, hotel/building icon, "AED XX"
+• No child bubbles for revenue
+• Delta annotation: "▼ -XX%"
 
-SLIDE TITLE (top strip, full width): Bold headline: "Overnight guests and hotel revenue targets revised — three signals explain the gap"
-DCT geometric ornament (interlocking circles + diamond shape) in top-right corner.
+RIGHT SIDE CONTENT — 3 SIGNAL BOXES:
+Three stacked boxes, each with:
+  Left portion: icon + signal name (bold) + 1-line consultant description
+  Right portion: embedded mini data chart
 
-======= LEFT PANEL (48% of slide width) =======
-Two separate bubble groups stacked vertically, with generous space between them.
+SIGNAL 1 — Recovery Curves (coral accent):
+  Globe icon · "Recovery Curves" · "Peer markets fell 12–30% in Year 1 — AUH within the band"
+  Chart: Indexed multi-line chart. X=Year 0→3. Y=visitor index (100=pre-conflict). 4 peer lines (THA/JPN/TUN/EGY) dip then recover. Dashed coral AUH line within the shaded peer band.
 
---- GROUP 1: OVERNIGHT GUESTS (top half of left panel) ---
+SIGNAL 2 — Seat Connectivity (navy accent):
+  Plane icon · "Seat Connectivity" · "Inbound seat supply contracted — hard ceiling on arrivals"
+  Chart: Diverging horizontal bars. Rows=Q1/Q2/Q3/Q4. Bars extend LEFT from zero baseline showing -22%, -35%, -41%, -XX%. Bars in coral/red. Getting progressively longer.
 
-Two large parent circles side by side at the SAME vertical level:
+SIGNAL 3 — Net Sentiment (green accent):
+  Speech bubble with descending bars icon · "Net Sentiment" · "Below benchmark in all source markets — demand suppressed"
+  Chart: Lollipop dot plot. Y-axis=GCC/India/UK/Germany/KSA. All dots cluster 28–52. Vertical dashed benchmark line at 70. All dots left of benchmark. Dots in green.
 
-LEFT PARENT CIRCLE — "NEW TARGET":
-- Small label above: "NEW TARGET" in small caps
-- Circle filled with DCT coral (#E8583A)
-- Inside: person/silhouette icon at top, then large white number "XX" bold, then small unit below
-- This circle is SMALLER than the old target circle
-
-RIGHT PARENT CIRCLE — "OLD TARGET":
-- Small label above: "OLD TARGET" in small caps  
-- Circle filled with muted grey-navy (showing it's the past/reference)
-- Inside: same person icon, large white number "XX" bold (the higher original target)
-- This circle is LARGER than the new target circle — visually communicates the original was bigger
-
-Thin connector lines drop DOWN from bottom of each parent circle to two child circles below:
-
-From NEW TARGET (left parent) — two small circles branching down:
-  Child LEFT: coral outline, white fill, plane icon, "INTL" label, number "XX"
-  Child RIGHT: coral outline, white fill, home icon, "DOM" label, number "XX"
-  Child sizes proportional to each other (INTL > DOM if international is larger number)
-
-From OLD TARGET (right parent) — two small circles branching down:
-  Child LEFT: grey outline, "INTL" label, number "XX" (old international target)
-  Child RIGHT: grey outline, "DOM" label, number "XX" (old domestic target)
-
---- GROUP 2: HOTEL REVENUE (bottom half of left panel) ---
-
-Two circles side by side, same logic:
-LEFT: "NEW TARGET" — coral, SMALLER circle, building/hotel icon, "AED XX" bold white
-RIGHT: "OLD TARGET" — grey-navy, LARGER circle (old target was higher), "AED XX" bold white
-No child bubbles for hotel revenue.
-
-A small delta annotation between each pair: "▼ -XX%" in a small dark pill label
-
-======= THIN VERTICAL DIVIDER LINE =======
-
-======= RIGHT PANEL (52% of slide width) =======
-Three stacked signal boxes, each ~1/3 height of right panel.
-Each box has a LEFT SECTION (~35% of box width) and a RIGHT SECTION with an embedded chart (~65% of box width).
-
---- SIGNAL BOX 1: Recovery Curves ---
-Left border accent: thick coral (#E8583A) bar on left edge
-Left section: 
-  Globe/world icon (line drawing style, clean)
-  Bold label: "Recovery Curves"
-  One-line description: "Post-conflict peer markets declined 12–30% in Year 1 — AUH projected within band"
-  
-Right section — INDEXED LINE CHART:
-  X-axis: "Year 0" (conflict start) → "Year 1" → "Year 2" → "Year 3"
-  Y-axis: Visitor index (Pre-conflict = 100)
-  Four thin lines for Thailand (blue), Japan (green), Tunisia (orange), Egypt (purple) — all start at 100, drop sharply to 70–85 range at Year 1, then curve upward
-  One DASHED CORAL line: "AUH projected" — follows similar trajectory within the band
-  Grey shaded band showing the peer recovery range
-  Minimal gridlines, clean labels, tiny country name labels at end of lines
-  Chart title in tiny text: "Visitor arrivals index (pre-conflict = 100)"
-
---- SIGNAL BOX 2: Seat Connectivity ---
-Left border accent: thick navy (#1a2e4a) bar
-Left section:
-  Airplane icon
-  Bold label: "Seat Connectivity"
-  One-line: "Inbound seat supply into AUH contracted — hard ceiling on international arrivals"
-
-Right section — DIVERGING HORIZONTAL BAR CHART:
-  Central zero baseline (vertical line in centre)
-  Horizontal bars extending LEFT (negative = seat contraction) from the zero line
-  Rows: "Q1 post-conflict: -22%", "Q2: -35%", "Q3: -41%", "Q4 projected: -XX%"
-  Bars in deep red/coral on left of zero
-  Each bar clearly labelled with its % value
-  Zero line marked "Pre-conflict baseline"
-  The bars get progressively longer (worse) going down — shows deterioration
-  Very clean, minimal, no grid noise
-
---- SIGNAL BOX 3: Net Sentiment ---
-Left border accent: thick green (#1A7A4A) bar
-Left section:
-  Speech bubble icon with three descending bars inside (sentiment going down)
-  Bold label: "Net Sentiment"
-  One-line: "Destination sentiment below benchmark in all source markets — demand suppressed"
-
-Right section — LOLLIPOP DOT PLOT:
-  Vertical axis (Y): five source markets listed top to bottom: GCC, India, UK, Germany, KSA
-  Horizontal axis (X): sentiment score 0 to 100
-  Each market: a thin horizontal line extending from left edge ending in a filled CIRCLE (lollipop)
-  All circles cluster between 28–52 on the scale
-  A vertical dashed line at x=70 labelled "Benchmark"
-  ALL circles are clearly to the LEFT of the benchmark — visually proves all markets are below target
-  Circles coloured green (#1A7A4A)
-  Clean, spacious, easy to read at small size
-
-======= FOOTER (bottom strip) =======
-"© Department of Culture and Tourism — Abu Dhabi · Conflict-adjusted targets · 2026"
-Small: "Source: UNWTO peer benchmarks · OAG seat data · DCT sentiment index"`;
-
-const DCT_RULES = `
-DCT ABU DHABI BRAND:
-• This is a professional printed slide, 16:9 ratio — NOT a website, NOT HTML, NOT an app screen
-• Generate as a single polished image
-• Background: warm cream (#EDE5D8) — gives the slide warmth and authority
-• Primary accent: DCT coral (#E8583A)
-• Supporting: deep navy (#1a2e4a), grey for reference/old data, green (#1A7A4A) for sentiment signal
-• DCT geometric ornament (interlocking half-circles + diamond/rhombus) in top-right
-• Heavy bold typography for KPI numbers, clean light font for chart labels
-• Generous whitespace — leadership slides breathe
-• The three charts on the right must look like REAL charts — precise, data-driven, not decorative`;
+FOOTER: "© Department of Culture and Tourism — Abu Dhabi · Conflict-adjusted targets · 2026"
+DCT geometric ornament (interlocking circles + diamond) in top-right corner.
+This is a printed 16:9 professional slide — not a website, not HTML.`;
 
 const DESIGNS = [
   {
     id: 1,
-    name: "Variant A — Cream & Coral",
-    concept: "Warm editorial · cream bg · coral new targets · grey old targets",
-    desc: "Old target bubbles are larger and grey — they represent what was before. New target bubbles are smaller and coral — the revised reality. The SIZE difference is the message. Charts are clean and minimal on cream.",
-    prompt: `Create a professional executive leadership slide for DCT Abu Dhabi. 16:9 ratio. High quality image output.
+    name: "Option 1 — Warm Cream Editorial",
+    concept: "Annual report style · cream bg · coral/grey bubbles · clean charts",
+    desc: "Classic DCT brand. Cream background, coral new-target bubbles, larger grey old-target bubbles. Charts are precise and minimal. Feels like a premium annual report page.",
+    prompt: `Professional DCT Abu Dhabi leadership slide, 16:9 image output.
 
-VARIANT A: Cream (#EDE5D8) background. New target bubbles are coral (#E8583A). Old target bubbles are larger and filled muted grey-navy to show they are reference/past values. The contrast between big grey (old) and smaller coral (new) tells the story of downward revision instantly.
+VISUAL TREATMENT: Warm editorial annual report style.
+• Background: warm cream (#EDE5D8) full bleed
+• Old target bubbles: large, filled muted grey-navy (#8a9ab0), clearly bigger
+• New target bubbles: smaller, filled bright coral (#E8583A)
+• Child bubbles: coral outline on cream for new children; grey outline for old children
+• Signal boxes: white cards with subtle shadow, coloured left border bars
+• Charts: clean black/grey on white, coral for AUH/highlight elements
+• Typography: dark near-black for labels, bold heavy for numbers
+• Overall feel: premium, restrained, authoritative — like McKinsey or BCG annual report page
+• DCT geometric ornament in top-right in coral
 
-${BUBBLE_LOGIC}
+Slide title: "Overnight guests and hotel revenue targets revised — three demand signals explain the gap"
 
-${LAYOUT}
-
-${DCT_RULES}`
+${CORE_CONTENT}`
   },
   {
     id: 2,
-    name: "Variant B — Dark Premium",
-    concept: "Deep navy bg · coral new targets glow · ghost old targets fade",
-    desc: "Deep navy background makes the coral new-target bubbles pop. Old target bubbles are large but ghost/semi-transparent — they are the faded past. Smaller glowing coral bubbles are the present reality. Charts on dark cards with bright data elements.",
-    prompt: `Create a professional executive leadership slide for DCT Abu Dhabi. 16:9 ratio. High quality image output.
+    name: "Option 2 — Dark Navy Premium",
+    concept: "Dark luxury · navy bg · glowing coral new targets · ghost old targets",
+    desc: "Deep navy full bleed. New target bubbles glow in coral. Old target bubbles are larger but ghost/outline only — they are the faded past. Charts bright on dark cards. Premium, dramatic.",
+    prompt: `Professional DCT Abu Dhabi leadership slide, 16:9 image output.
 
-VARIANT B: Deep navy (#0d1e30) full-bleed background. New target bubbles glow in coral (#E8583A) — bright and solid. Old target bubbles are LARGER but rendered as ghost/outline-only circles, semi-transparent, clearly showing they were the bigger original targets now replaced. The size contrast is critical — large ghost old target beside smaller glowing coral new target.
-
-${BUBBLE_LOGIC}
-
-${LAYOUT}
-
-DARK VARIANT OVERRIDES:
+VISUAL TREATMENT: Dark luxury premium.
 • Background: deep navy (#0d1e30) full bleed
-• New target bubbles: bright solid coral (#E8583A), glowing quality
-• Old target bubbles: large ghost circles — white/cream outline only, filled with very subtle transparency, clearly subordinate
-• Child bubbles: coral outline for new children, ghost outline for old children
-• Divider line: subtle white at 20% opacity
-• Right panel signal boxes: dark card (#111827) background, coloured left borders
-• Charts: bright elements on dark backgrounds — coral lines, coloured dots, white axis labels
-• All text: white or light cream
-• DCT ornament: coral/gold version
-• Footer: subtle white at 50% opacity
+• Old target bubbles: LARGE ghost circles — white outline only, 15% opacity fill, clearly bigger than new
+• New target bubbles: smaller but bright solid coral (#E8583A), glowing against dark bg
+• Child bubbles: coral outline for new; ghost white outline for old
+• Signal boxes: dark cards (#111827), coloured left borders (coral/navy/green)
+• Charts: bright coloured elements on dark — coral lines, vivid dots, white axis labels
+• Typography: white throughout, bold heavy for numbers
+• Feel: sovereign wealth fund presentation, ADNOC-style premium dark
+• DCT ornament: coral/gold version top-right
 
-${DCT_RULES}`
+Slide title: "Overnight guests and hotel revenue targets revised — three demand signals explain the gap"
+
+${CORE_CONTENT}`
+  },
+  {
+    id: 3,
+    name: "Option 3 — Split Panel Diagonal",
+    concept: "Diagonal colour split · coral upper-left · cream lower-right",
+    desc: "Bold diagonal cut. Coral upper-left panel holds the bubble diagram. Cream lower-right panel holds the signal boxes. The cut creates visual tension. Charts are embedded in cream cards.",
+    prompt: `Professional DCT Abu Dhabi leadership slide, 16:9 image output.
+
+VISUAL TREATMENT: Bold diagonal split panel.
+• Background: diagonal cut from top-left to bottom-right. Upper-left triangle: coral (#E8583A). Lower-right triangle: cream (#EDE5D8)
+• The bubble diagram sits in the coral zone — white bubbles with dark numbers for new targets, cream/outlined for old targets
+• The three signal boxes sit in the cream zone
+• A bold diagonal line separates the two zones
+• Typography: white on coral side, dark on cream side
+• Charts: dark on cream background
+• Feel: bold, editorial, unexpected layout — like a Monocle or Wired data spread
+• DCT ornament: white version on coral, dark version on cream, top-right
+
+Slide title spans full width at top in a dark (#1a1a1a) header strip.
+
+${CORE_CONTENT}`
+  },
+  {
+    id: 4,
+    name: "Option 4 — Newspaper Column Grid",
+    concept: "FT/Economist editorial · column grid · headline banner · structured",
+    desc: "Treated as a breaking data story. Dark header bar with bold headline. Bubble diagram in left columns. Signal boxes as editorial sidebar columns on right. Feels like FT or The Economist data page.",
+    prompt: `Professional DCT Abu Dhabi leadership slide, 16:9 image output.
+
+VISUAL TREATMENT: Financial Times / Economist newspaper editorial grid.
+• Full slide background: off-white (#F5F2EC)
+• TOP HEADER BAR (full width, dark #1a1a1a, ~15% height): "TARGETS REVISED" in massive bold white type left-aligned. Right: DCT coral ornament. Below header: thin coral rule line.
+• LEFT ZONE (50%): The bubble diagram rendered in a structured column grid style. Bubbles are drawn with editorial precision — clean outlines, numbers in bold serif-ish style. Old target bubbles larger in dark grey. New target in coral. Thin connecting lines to children. Very precise, no decorative elements.
+• VERTICAL RULE: thin dark line dividing left and right
+• RIGHT ZONE (50%): Three signal boxes stacked. Each styled like an editorial sidebar box with a small coloured header bar. Charts inside each box styled like FT chart typography — minimal, precise, annotated.
+• Footer: small italic source line at bottom
+• Overall: restraint, precision, editorial authority. Zero decoration.
+
+Slide title already in header bar.
+
+${CORE_CONTENT}`
+  },
+  {
+    id: 5,
+    name: "Option 5 — Radial Bubble Network",
+    concept: "Network diagram · bubbles connected organically · signals as satellite nodes",
+    desc: "The two KPI bubble groups flow organically like a network diagram. Curved connector lines link parents to children. Signal boxes on the right are rounded cards connected by thin lines suggesting causality. More organic and visual than a grid.",
+    prompt: `Professional DCT Abu Dhabi leadership slide, 16:9 image output.
+
+VISUAL TREATMENT: Organic network / bubble diagram style — like a high-end consulting network map.
+• Background: cream (#EDE5D8)
+• LEFT ZONE: Bubble groups arranged as an organic network. The two groups (overnight guests and hotel revenue) each have their parent bubbles connected to child bubbles via CURVED organic lines (not straight). The layout feels like a mind map or network diagram — generous spacing, bubbles float with breathing room.
+• Old target bubbles: larger, filled light grey with soft shadow effect
+• New target bubbles: smaller, filled coral with subtle glow
+• Delta annotations: small coral pill badges showing "-XX%" near each pair
+• RIGHT ZONE: Three signal cards styled as rounded rectangular cards with soft shadows. Each card has the icon, name, description AND chart. Cards connected to a central "VERDICT" node at bottom right by thin lines, suggesting the three signals feed into one conclusion. The verdict node: dark circle with "-XX% REVISION" in coral.
+• Charts: slightly more stylised — the line chart has a subtle area fill, the bars have rounded ends, the lollipops have filled circles.
+• Overall: organic, flowing, premium consulting feel — McKinsey innovation practice style
+
+Slide title: top-left, large bold on cream.
+
+${CORE_CONTENT}`
+  },
+  {
+    id: 6,
+    name: "Option 6 — Minimalist White Space",
+    concept: "Maximum whitespace · numbers breathe · pure typography + geometry",
+    desc: "Almost uncomfortably minimal. Huge whitespace. Bubbles are sparse and precise. Numbers are enormous. The charts are small but perfect. Inspired by Apple keynote data slides and Pentagram annual reports.",
+    prompt: `Professional DCT Abu Dhabi leadership slide, 16:9 image output.
+
+VISUAL TREATMENT: Ultra-minimalist whitespace — Apple keynote meets Pentagram annual report.
+• Background: pure white (#FFFFFF) — maximum brightness and clarity
+• Only essential elements exist — no borders, no shadows, no decorative lines
+• LEFT ZONE: Bubble pairs with maximum breathing room. Bubbles drawn as clean geometric circles — no gradients, no glow, flat fill. Old target: large flat grey circle (#C5C5C5). New target: smaller flat coral circle (#E8583A). Numbers inside are ENORMOUS relative to bubble size — the number IS the bubble. Child bubbles: very small, connected by hairline-thin lines.
+• A single thin coral horizontal rule separates overnight guests group from hotel revenue group
+• RIGHT ZONE: Three signal entries — minimal. No box borders. Just: icon + bold signal name + one-line description + chart floating in white space. Charts are tiny and precise — no chart borders, no background fills, just the data marks on white.
+• Typography: one weight (black) for numbers, one weight (regular) for all labels. Very large numbers.
+• Coral (#E8583A) used ONLY as accent — the new target bubbles and the chart highlights. Everything else is grey or black.
+• DCT ornament: hairline version top-right
+• Feel: Jony Ive would approve. Silence and precision.
+
+Slide title: top-left, medium bold black, no decoration.
+
+${CORE_CONTENT}`
   }
 ];
 
@@ -254,7 +255,7 @@ DESIGNS.forEach((d, i) => {
       <div class="placeholder"><div class="placeholder-txt">Waiting…</div></div>
     </div>
     <div class="dl-row">
-      <button class="btn-dl" id="dl${d.id}" onclick="dlImg(${d.id})">↓ Download ${d.name}</button>
+      <button class="btn-dl" id="dl${d.id}" onclick="dlImg(${d.id})">↓ Download Option ${d.id}</button>
     </div>
     ${i < DESIGNS.length - 1 ? '<div class="divider"></div>' : ''}
   `;
@@ -266,10 +267,12 @@ async function startGen() {
   if (!key) { setStatus(0, '⚠ Paste your OpenAI key first.'); return; }
   done = 0;
   document.getElementById('btnGen').disabled = true;
-  setStatus(0, 'Generating both variants in parallel…');
+  setStatus(0, 'Firing all 6 in parallel…');
   DESIGNS.forEach(d => setLoading(d.id));
-  await Promise.allSettled(DESIGNS.map(d => gen(d.id, d.prompt, key)));
-  const msg = done === TOTAL ? '✓ Both variants ready — tap download to save.' : `Done — ${done}/${TOTAL} succeeded.`;
+  // Batch in 2 waves of 3 to avoid rate limits
+  await Promise.allSettled(DESIGNS.slice(0,3).map(d => gen(d.id, d.prompt, key)));
+  await Promise.allSettled(DESIGNS.slice(3).map(d => gen(d.id, d.prompt, key)));
+  const msg = done === TOTAL ? `✓ All 6 options ready. Tap any download to save.` : `Done — ${done}/${TOTAL} succeeded. Retry any failures.`;
   setStatus(100, msg);
   document.getElementById('btnGen').disabled = false;
 }
@@ -284,7 +287,7 @@ async function gen(id, prompt, key, isRetry = false) {
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       if (res.status === 401) { DESIGNS.forEach(d => setErr(d.id, 'Invalid API key.')); setStatus(null, '✗ Invalid API key.'); document.getElementById('btnGen').disabled = false; return; }
-      if (res.status === 429 && !isRetry) { await new Promise(r => setTimeout(r, 3500)); return gen(id, prompt, key, true); }
+      if (res.status === 429 && !isRetry) { await new Promise(r => setTimeout(r, 4000)); return gen(id, prompt, key, true); }
       throw new Error(err.error?.message || `HTTP ${res.status}`);
     }
     const data = await res.json();
@@ -295,15 +298,15 @@ async function gen(id, prompt, key, isRetry = false) {
 }
 
 function setLoading(id) {
-  document.getElementById(`f${id}`).innerHTML = `<div class="placeholder"><div class="spinner"></div><div class="placeholder-txt">Generating…</div></div>`;
+  document.getElementById(`f${id}`).innerHTML = `<div class="placeholder"><div class="spinner"></div><div class="placeholder-txt">Generating option ${id}…</div></div>`;
   document.getElementById(`dl${id}`).classList.remove('ready');
 }
 function setImg(id, url) {
-  document.getElementById(`f${id}`).innerHTML = `<img src="${url}" alt="Variant ${id}">`;
+  document.getElementById(`f${id}`).innerHTML = `<img src="${url}" alt="Option ${id}">`;
   document.getElementById(`dl${id}`).classList.add('ready');
 }
 function setErr(id, msg) {
-  document.getElementById(`f${id}`).innerHTML = `<div class="err-box"><div class="err-msg">✗ ${msg}</div><button class="btn-retry" onclick="gen(${id}, DESIGNS[${id-1}].prompt, document.getElementById('apikey').value.trim())">Retry</button></div>`;
+  document.getElementById(`f${id}`).innerHTML = `<div class="err-box"><div class="err-msg">✗ ${msg}</div><button class="btn-retry" onclick="gen(${id}, DESIGNS[${id-1}].prompt, document.getElementById('apikey').value.trim())">Retry ${id}</button></div>`;
 }
 function setStatus(pct, msg) {
   if (pct !== null) document.getElementById('pBar').style.width = pct + '%';
@@ -311,7 +314,7 @@ function setStatus(pct, msg) {
 }
 function dlImg(id) {
   if (!store[id]) return;
-  const a = document.createElement('a'); a.href = store[id]; a.download = `dct_slide6_v${id}.png`;
+  const a = document.createElement('a'); a.href = store[id]; a.download = `dct_slide6_option${id}.png`;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
 </script>
