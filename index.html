@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>DCT Slide Generator — 5 Designs</title>
+<title>DCT Slide 6 — Bubble KPIs + Signal Charts</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f0f0f; color: #fff; min-height: 100vh; }
@@ -15,18 +15,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 .controls input { width: 100%; border: 1px solid #333; border-radius: 8px; background: #222; padding: 11px 14px; font-size: 14px; outline: none; color: #fff; font-family: monospace; margin-bottom: 10px; }
 .controls input:focus { border-color: #c8a96e; }
 .key-note { font-size: 10px; color: #444; margin-bottom: 12px; }
-.btn-gen { width: 100%; background: #E8583A; color: #fff; border: none; border-radius: 8px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; letter-spacing: 0.3px; }
+.btn-gen { width: 100%; background: #E8583A; color: #fff; border: none; border-radius: 8px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; }
 .btn-gen:disabled { background: #3a3a3a; color: #666; cursor: not-allowed; }
 .progress-bar-wrap { height: 3px; background: #1a1a1a; }
 .progress-bar-fill { height: 3px; background: #c8a96e; width: 0%; transition: width 0.4s; }
 .status { padding: 8px 20px; font-size: 11px; color: #555; background: #111; border-bottom: 1px solid #1a1a1a; min-height: 28px; }
 .main { padding: 20px; max-width: 1000px; margin: 0 auto; }
-.design-block { margin-bottom: 48px; }
+.design-block { margin-bottom: 40px; }
 .design-label { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
 .design-num { width: 32px; height: 32px; border-radius: 50%; background: #E8583A; color: #fff; font-size: 13px; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-.design-name { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
+.design-name { font-size: 14px; font-weight: 700; color: #fff; }
 .design-concept { font-size: 10px; color: #c8a96e; margin-top: 2px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
-.design-desc { font-size: 11px; color: #555; margin-top: 4px; line-height: 1.5; }
+.design-desc { font-size: 11px; color: #666; margin-top: 4px; line-height: 1.6; }
 .img-box { width: 100%; aspect-ratio: 16/9; border-radius: 10px; overflow: hidden; background: #1a2e4a; display: flex; align-items: center; justify-content: center; border: 1px solid #222; }
 .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .placeholder { display: flex; flex-direction: column; align-items: center; gap: 10px; }
@@ -39,19 +39,19 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 .dl-row { margin-top: 8px; }
 .btn-dl { width: 100%; background: transparent; border: 1px solid #2a2a2a; color: #444; padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: not-allowed; }
 .btn-dl.ready { border-color: #c8a96e; color: #c8a96e; cursor: pointer; }
-.divider { border: none; border-top: 1px solid #1a1a1a; margin: 36px 0; }
+.divider { border: none; border-top: 1px solid #1a1a1a; margin: 32px 0; }
 </style>
 </head>
 <body>
 <div class="header">
-  <h1>DCT Abu Dhabi — Leadership Slide Generator</h1>
-  <p>5 structural concepts · gpt-image-2 · DCT brand · research-grounded</p>
+  <h1>DCT Slide 6 — Proportional Bubbles + Signal Charts</h1>
+  <p>Bubble SIZE carries the meaning · 2 colour variants · gpt-image-2</p>
 </div>
 <div class="controls">
   <label>OpenAI API Key</label>
   <input type="password" id="apikey" placeholder="sk-…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
   <div class="key-note">Sent only to OpenAI · not stored anywhere</div>
-  <button class="btn-gen" id="btnGen" onclick="startGen()">Generate All 5 Designs</button>
+  <button class="btn-gen" id="btnGen" onclick="startGen()">Generate Both Variants</button>
 </div>
 <div class="progress-bar-wrap"><div class="progress-bar-fill" id="pBar"></div></div>
 <div class="status" id="statusTxt">Paste your OpenAI key and tap Generate.</div>
@@ -60,199 +60,183 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 <script>
 const store = {};
 let done = 0;
-const TOTAL = 5;
+const TOTAL = 2;
 
-const DCT = `
-STRICT DCT ABU DHABI BRAND RULES — follow exactly:
-• Primary background: warm cream (#EDE5D8) OR DCT coral (#E8583A) — no generic blue/grey
-• DCT coral (#E8583A) is the hero accent colour
-• Secondary palette: deep navy (#1a2e4a), hot crimson (#D4175A), forest green (#1A7A4A), near-black (#1a1a1a)
-• DCT geometric ornament (interlocking circles + diamond/rhombus shape) always in top-right corner
-• Typography: heavy weight, large scale, editorial — this is a LEADERSHIP slide not a report
-• No bullet lists, no tables — pure visual hierarchy
-• All three signals must have distinct icons: globe for recovery curves, airplane for seat connectivity, speech-bubble-with-descending-bars for net sentiment
-• Conclusion: always a near-black (#1a1a1a) panel with a large coral number showing -XX% revision impact
-• The word "XX" is a placeholder — render it as actual styled text on the slide
-• This is a printed slide, 16:9, no HTML elements, no browser UI, no code`;
+const BUBBLE_LOGIC = `
+CRITICAL BUBBLE SIZING RULE — this is the core visual principle:
+Bubble SIZE must be PROPORTIONAL to the number it represents. The old target was LARGER than the new target. Therefore the OLD TARGET bubble must be VISIBLY BIGGER than the NEW TARGET bubble. The size difference communicates the downward revision instantly — no text needed. A viewer should look at the two bubbles and immediately understand "the old target was bigger, the new target is smaller." This is the entire point of using bubbles instead of numbers in boxes.
 
-const CONTENT = `
-KPI BLOCK — three metrics, before/after conflict:
-1. Overnight guests: XX total · International XX · Domestic XX · Old target was XX · Revised to XX · Change: -XX%
-2. Hotel revenue: AED XX · Old target AED XX · Revised to AED XX · Change: -XX%  
-3. Occupancy rate: XX% · Old target XX% · Revised to XX% · Change: -XX%
+Specifically:
+- OLD TARGET overnight guests bubble: the LARGEST circle on the left panel (biggest number = biggest circle)
+- NEW TARGET overnight guests bubble: noticeably SMALLER — sits beside the old one at same height
+- OLD TARGET hotel revenue bubble: second-largest pair
+- NEW TARGET hotel revenue bubble: smaller than its old pair
+- Child bubbles (INTL and DOM): always smaller than their parent, but also sized relative to each other (International is usually larger than Domestic, so international child bubble is bigger)
 
-SIGNAL BLOCK — three demand signals that drove the downward revision:
-Signal 1 (globe icon): Recovery curves — Thailand, Japan, Tunisia, Egypt each saw 12–30% visitor drop in Year 1 post-conflict. AUH sits within their band. → Calibrates pace of decline
-Signal 2 (airplane icon): Seat connectivity — Inbound airline seat supply into AUH contracted sharply. Hard ceiling on arrivals. → Sets volume ceiling  
-Signal 3 (speech bubble icon): Net sentiment — Fell across GCC, Europe, South Asia. Demand suppression confirmed. → Validates demand drop
+The visual hierarchy tells the story: big old bubble → smaller new bubble → even smaller children branching below.`;
 
-CONCLUSION: All three signals independently confirm the same verdict — targets revised down -XX% from original. Dark panel, large coral number.
+const LAYOUT = `
+EXACT SLIDE LAYOUT — 16:9 ratio:
 
-Brand: Department of Culture and Tourism — Abu Dhabi (DCT Abu Dhabi) · 2026`;
+SLIDE TITLE (top strip, full width): Bold headline: "Overnight guests and hotel revenue targets revised — three signals explain the gap"
+DCT geometric ornament (interlocking circles + diamond shape) in top-right corner.
+
+======= LEFT PANEL (48% of slide width) =======
+Two separate bubble groups stacked vertically, with generous space between them.
+
+--- GROUP 1: OVERNIGHT GUESTS (top half of left panel) ---
+
+Two large parent circles side by side at the SAME vertical level:
+
+LEFT PARENT CIRCLE — "NEW TARGET":
+- Small label above: "NEW TARGET" in small caps
+- Circle filled with DCT coral (#E8583A)
+- Inside: person/silhouette icon at top, then large white number "XX" bold, then small unit below
+- This circle is SMALLER than the old target circle
+
+RIGHT PARENT CIRCLE — "OLD TARGET":
+- Small label above: "OLD TARGET" in small caps  
+- Circle filled with muted grey-navy (showing it's the past/reference)
+- Inside: same person icon, large white number "XX" bold (the higher original target)
+- This circle is LARGER than the new target circle — visually communicates the original was bigger
+
+Thin connector lines drop DOWN from bottom of each parent circle to two child circles below:
+
+From NEW TARGET (left parent) — two small circles branching down:
+  Child LEFT: coral outline, white fill, plane icon, "INTL" label, number "XX"
+  Child RIGHT: coral outline, white fill, home icon, "DOM" label, number "XX"
+  Child sizes proportional to each other (INTL > DOM if international is larger number)
+
+From OLD TARGET (right parent) — two small circles branching down:
+  Child LEFT: grey outline, "INTL" label, number "XX" (old international target)
+  Child RIGHT: grey outline, "DOM" label, number "XX" (old domestic target)
+
+--- GROUP 2: HOTEL REVENUE (bottom half of left panel) ---
+
+Two circles side by side, same logic:
+LEFT: "NEW TARGET" — coral, SMALLER circle, building/hotel icon, "AED XX" bold white
+RIGHT: "OLD TARGET" — grey-navy, LARGER circle (old target was higher), "AED XX" bold white
+No child bubbles for hotel revenue.
+
+A small delta annotation between each pair: "▼ -XX%" in a small dark pill label
+
+======= THIN VERTICAL DIVIDER LINE =======
+
+======= RIGHT PANEL (52% of slide width) =======
+Three stacked signal boxes, each ~1/3 height of right panel.
+Each box has a LEFT SECTION (~35% of box width) and a RIGHT SECTION with an embedded chart (~65% of box width).
+
+--- SIGNAL BOX 1: Recovery Curves ---
+Left border accent: thick coral (#E8583A) bar on left edge
+Left section: 
+  Globe/world icon (line drawing style, clean)
+  Bold label: "Recovery Curves"
+  One-line description: "Post-conflict peer markets declined 12–30% in Year 1 — AUH projected within band"
+  
+Right section — INDEXED LINE CHART:
+  X-axis: "Year 0" (conflict start) → "Year 1" → "Year 2" → "Year 3"
+  Y-axis: Visitor index (Pre-conflict = 100)
+  Four thin lines for Thailand (blue), Japan (green), Tunisia (orange), Egypt (purple) — all start at 100, drop sharply to 70–85 range at Year 1, then curve upward
+  One DASHED CORAL line: "AUH projected" — follows similar trajectory within the band
+  Grey shaded band showing the peer recovery range
+  Minimal gridlines, clean labels, tiny country name labels at end of lines
+  Chart title in tiny text: "Visitor arrivals index (pre-conflict = 100)"
+
+--- SIGNAL BOX 2: Seat Connectivity ---
+Left border accent: thick navy (#1a2e4a) bar
+Left section:
+  Airplane icon
+  Bold label: "Seat Connectivity"
+  One-line: "Inbound seat supply into AUH contracted — hard ceiling on international arrivals"
+
+Right section — DIVERGING HORIZONTAL BAR CHART:
+  Central zero baseline (vertical line in centre)
+  Horizontal bars extending LEFT (negative = seat contraction) from the zero line
+  Rows: "Q1 post-conflict: -22%", "Q2: -35%", "Q3: -41%", "Q4 projected: -XX%"
+  Bars in deep red/coral on left of zero
+  Each bar clearly labelled with its % value
+  Zero line marked "Pre-conflict baseline"
+  The bars get progressively longer (worse) going down — shows deterioration
+  Very clean, minimal, no grid noise
+
+--- SIGNAL BOX 3: Net Sentiment ---
+Left border accent: thick green (#1A7A4A) bar
+Left section:
+  Speech bubble icon with three descending bars inside (sentiment going down)
+  Bold label: "Net Sentiment"
+  One-line: "Destination sentiment below benchmark in all source markets — demand suppressed"
+
+Right section — LOLLIPOP DOT PLOT:
+  Vertical axis (Y): five source markets listed top to bottom: GCC, India, UK, Germany, KSA
+  Horizontal axis (X): sentiment score 0 to 100
+  Each market: a thin horizontal line extending from left edge ending in a filled CIRCLE (lollipop)
+  All circles cluster between 28–52 on the scale
+  A vertical dashed line at x=70 labelled "Benchmark"
+  ALL circles are clearly to the LEFT of the benchmark — visually proves all markets are below target
+  Circles coloured green (#1A7A4A)
+  Clean, spacious, easy to read at small size
+
+======= FOOTER (bottom strip) =======
+"© Department of Culture and Tourism — Abu Dhabi · Conflict-adjusted targets · 2026"
+Small: "Source: UNWTO peer benchmarks · OAG seat data · DCT sentiment index"`;
+
+const DCT_RULES = `
+DCT ABU DHABI BRAND:
+• This is a professional printed slide, 16:9 ratio — NOT a website, NOT HTML, NOT an app screen
+• Generate as a single polished image
+• Background: warm cream (#EDE5D8) — gives the slide warmth and authority
+• Primary accent: DCT coral (#E8583A)
+• Supporting: deep navy (#1a2e4a), grey for reference/old data, green (#1A7A4A) for sentiment signal
+• DCT geometric ornament (interlocking half-circles + diamond/rhombus) in top-right
+• Heavy bold typography for KPI numbers, clean light font for chart labels
+• Generous whitespace — leadership slides breathe
+• The three charts on the right must look like REAL charts — precise, data-driven, not decorative`;
 
 const DESIGNS = [
   {
     id: 1,
-    name: "Waterfall Deviation",
-    concept: "FT Visual Vocabulary — deviation/waterfall chart",
-    desc: "KPIs shown as a waterfall: original target bar → gap bar (the conflict impact, in red) → new target bar. Methodology signals on right as annotated timeline.",
-    prompt: `Design concept: WATERFALL DEVIATION CHART — inspired by Financial Times Visual Vocabulary "deviation" category and McKinsey waterfall slides.
+    name: "Variant A — Cream & Coral",
+    concept: "Warm editorial · cream bg · coral new targets · grey old targets",
+    desc: "Old target bubbles are larger and grey — they represent what was before. New target bubbles are smaller and coral — the revised reality. The SIZE difference is the message. Charts are clean and minimal on cream.",
+    prompt: `Create a professional executive leadership slide for DCT Abu Dhabi. 16:9 ratio. High quality image output.
 
-Action title: "Conflict impact quantified: three signals explain the full downward revision across all KPIs"
+VARIANT A: Cream (#EDE5D8) background. New target bubbles are coral (#E8583A). Old target bubbles are larger and filled muted grey-navy to show they are reference/past values. The contrast between big grey (old) and smaller coral (new) tells the story of downward revision instantly.
 
-LEFT SIDE (60% width) — WATERFALL / DEVIATION CHART:
-Show three horizontal waterfall sequences, one per KPI, stacked vertically:
-Row 1 — Overnight guests: [Original target bar, coral] → [Gap/decline bar, dark red with downward arrow] → [New target bar, navy]. Label each segment. The gap bar is labelled "-XX%" prominently.
-Row 2 — Hotel revenue: same structure, AED values.
-Row 3 — Occupancy: same structure, % values.
-Above the chart: "ORIGINAL TARGET" label on left column, "CONFLICT IMPACT" centre (red), "REVISED TARGET" right (navy).
-This is a deviation waterfall — the middle red bars are the story.
-Make the bars clean, professional, generous whitespace between rows.
+${BUBBLE_LOGIC}
 
-RIGHT SIDE (40% width) — SIGNAL ANNOTATIONS:
-Cream (#EDE5D8) panel. Three signal blocks stacked:
-Each has: large coloured number (01, 02, 03), icon, signal name in bold, one punchy line. A small right-arrow connecting each to the waterfall conclusion.
-Below all three: dark conclusion box with "-XX%" large in coral.
+${LAYOUT}
 
-DCT geometric ornament top-right. Cream background overall.
-
-${CONTENT}
-${DCT}`
+${DCT_RULES}`
   },
   {
     id: 2,
-    name: "Bullet Chart Scorecard",
-    concept: "Stephen Few bullet chart — actual vs target vs benchmark",
-    desc: "Each KPI as a bullet chart bar: benchmark range shown as background band, old target as marker line, new target as bar. Signals as icon cards below.",
-    prompt: `Design concept: BULLET CHART SCORECARD — based on Stephen Few's bullet chart methodology, widely used in HBR and executive dashboards for comparing actual vs target vs benchmark in a single compact visual.
+    name: "Variant B — Dark Premium",
+    concept: "Deep navy bg · coral new targets glow · ghost old targets fade",
+    desc: "Deep navy background makes the coral new-target bubbles pop. Old target bubbles are large but ghost/semi-transparent — they are the faded past. Smaller glowing coral bubbles are the present reality. Charts on dark cards with bright data elements.",
+    prompt: `Create a professional executive leadership slide for DCT Abu Dhabi. 16:9 ratio. High quality image output.
 
-Action title: "All KPIs revised below original targets — three signals provide the analytical basis"
+VARIANT B: Deep navy (#0d1e30) full-bleed background. New target bubbles glow in coral (#E8583A) — bright and solid. Old target bubbles are LARGER but rendered as ghost/outline-only circles, semi-transparent, clearly showing they were the bigger original targets now replaced. The size contrast is critical — large ghost old target beside smaller glowing coral new target.
 
-TOP SECTION (55% height) — THREE BULLET CHARTS stacked:
-Each bullet chart row has:
-- Left label: KPI name + unit (large, bold)
-- Background: wide grey band showing the "benchmark range" (peer tourism destinations)
-- Thin vertical line: original pre-conflict target (labelled "Pre-conflict target")
-- Solid horizontal bar: new revised target (coral #E8583A fill, extends to the new lower value)
-- A gap annotation between the line and bar end: "-XX%" in dark red with bracket
-KPI 1: Overnight guests (XXM)
-KPI 2: Hotel revenue (AED XXB)  
-KPI 3: Occupancy rate (XX%)
-Use generous padding between rows. Add benchmark band label: "Peer destination range".
+${BUBBLE_LOGIC}
 
-BOTTOM SECTION (45% height) — SIGNAL ICONS ROW:
-Three cards side by side in cream (#EDE5D8):
-Each card: coloured top border (coral/crimson/green), large icon (globe/plane/speech bubble), signal name bold, one-line descriptor, impact tag pill.
-Dark conclusion bar spanning full width below: "-XX% CONFLICT-ADJUSTED REVISION · ALL SIGNALS ALIGNED" white on black, coral accent.
+${LAYOUT}
 
-DCT geometric ornament top-right. Cream (#EDE5D8) background.
+DARK VARIANT OVERRIDES:
+• Background: deep navy (#0d1e30) full bleed
+• New target bubbles: bright solid coral (#E8583A), glowing quality
+• Old target bubbles: large ghost circles — white/cream outline only, filled with very subtle transparency, clearly subordinate
+• Child bubbles: coral outline for new children, ghost outline for old children
+• Divider line: subtle white at 20% opacity
+• Right panel signal boxes: dark card (#111827) background, coloured left borders
+• Charts: bright elements on dark backgrounds — coral lines, coloured dots, white axis labels
+• All text: white or light cream
+• DCT ornament: coral/gold version
+• Footer: subtle white at 50% opacity
 
-${CONTENT}
-${DCT}`
-  },
-  {
-    id: 3,
-    name: "Newspaper Front Page",
-    concept: "Editorial newspaper / FT front page layout",
-    desc: "Treated as a breaking news story. Bold headline banner. KPI numbers in large editorial type with 'vs target' annotations. Signals as news sidebar column.",
-    prompt: `Design concept: NEWSPAPER EDITORIAL / FT FRONT PAGE — inspired by how the Financial Times and The Economist present major economic data stories. Treat this as a front-page data story, not a corporate slide.
-
-Action title: "TARGETS CUT" — displayed as a breaking headline in massive type
-
-LAYOUT — newspaper column grid:
-
-HEADER BAR (top, full width, dark #1a1a1a): 
-Left: "DCT ABU DHABI · LEADERSHIP BRIEFING · 2026" in small caps coral.
-Right: DCT geometric ornament.
-Below: thick coral rule line.
-
-MAIN HEADLINE (full width): "TARGETS CUT" in enormous bold white type (80pt weight) on dark background. Below it in smaller text: "Regional conflict forces downward revision across all tourism KPIs — three independent signals confirm the same impact."
-
-THREE-COLUMN BODY LAYOUT (below headline):
-Column 1 — Overnight guests: large number "XX" in coral as hero stat, below it "▼ -XX% vs target" in bold red, below that "Was: XX · Now: XX" in grey caption style. Small horizontal bar showing before/after magnitude.
-Column 2 — Hotel revenue: same treatment. "AED XX" hero, "▼ -XX%" bold red.
-Column 3 — Occupancy: "XX%" hero, "▼ -XX%" bold red.
-Vertical column rules separating them.
-
-RIGHT SIDEBAR (30% width, cream #EDE5D8 background, separated by thick rule):
-"THE EVIDENCE" as sidebar header in coral.
-Three signal blocks with icons (globe, plane, speech bubble), name, one-line descriptor. 
-Bottom of sidebar: dark box "-XX% REVISION CONFIRMED".
-
-Background: cream (#EDE5D8). This should feel like journalism, not PowerPoint.
-
-${CONTENT}
-${DCT}`
-  },
-  {
-    id: 4,
-    name: "Radial Impact Map",
-    concept: "Circular/radial layout — conflict at centre, KPIs radiate outward",
-    desc: "Central dark circle shows conflict event. Three KPI arcs radiate outward showing the impact. Signals shown as satellite nodes. Used in annual reports for causal mapping.",
-    prompt: `Design concept: RADIAL IMPACT / CAUSAL MAP — inspired by how top annual reports (LVMH, Sovereign Wealth Fund reports) and McKinsey use circular/radial diagrams to show a central cause radiating to multiple outcomes.
-
-Action title: "One conflict. Three signals. Three KPI revisions. All pointing the same direction."
-
-LAYOUT — radial/circular:
-
-CENTRE: Large dark circle (#1a1a1a) with coral border ring. Inside: "REGIONAL CONFLICT" label + small warning icon. This is the cause.
-
-THREE KPI ARCS (radiating left/upper-left/lower-left from centre):
-Arc 1 — Overnight guests: coral arc line curving from centre to a KPI card. Card: "OVERNIGHT GUESTS" label, "XX" large white on coral, "▼ -XX% vs target" below, "Was XX · Now XX" caption.
-Arc 2 — Hotel revenue: navy arc line. Card: "HOTEL REVENUE", "AED XX" large, "▼ -XX%".
-Arc 3 — Occupancy: green arc line. Card: "OCCUPANCY", "XX%" large, "▼ -XX%".
-
-THREE SIGNAL NODES (radiating right from centre):
-Three smaller circles connected to centre by dashed lines (coral/crimson/green):
-Node 1 (coral): Globe icon + "Recovery Curves" + "12–30% peer decline"
-Node 2 (crimson): Plane icon + "Seat Connectivity" + "Supply contracted"  
-Node 3 (green): Speech bubble icon + "Net Sentiment" + "Demand suppressed"
-
-Below the radial diagram, full-width dark bar: "ALL SIGNALS CONFIRM: -XX% REVISION · CONFLICT-ADJUSTED BASELINE · 2026"
-
-Background: warm cream (#EDE5D8). DCT ornament top-right. Generous whitespace — this diagram needs room to breathe.
-
-${CONTENT}
-${DCT}`
-  },
-  {
-    id: 5,
-    name: "Split Scorecard + Convergence Funnel",
-    concept: "McKinsey 2-panel: left data scorecard, right signal funnel",
-    desc: "Left: a clean scorecard table rendered as a visual with sparkline-style before/after bars. Right: three signals flowing into a convergence funnel — the FT 'part-to-whole' concept applied to evidence.",
-    prompt: `Design concept: TWO-PANEL SCORECARD + CONVERGENCE FUNNEL — combining McKinsey's clean data scorecard approach (left) with the FT Visual Vocabulary "flow" concept (right). The right panel shows three inputs converging into one output — a visual proof structure.
-
-Action title: "Three signals. One conclusion. Targets revised -XX% across the board."
-
-LEFT PANEL (48% width, cream #EDE5D8 background):
-Header: "KPI SCORECARD — CONFLICT ADJUSTMENT" in small coral caps.
-Three KPI rows, each as a visual scorecard entry:
-Each row has:
-- KPI name (bold, large)
-- A small horizontal "before/after" bar: two bars side by side, left bar (coral, taller = old target), right bar (navy, shorter = new target). Gap visually shows the decline.
-- Old target value label above left bar, new target value above right bar
-- Large "-XX%" delta label to the right of bars in dark red
-- Thin rule separator between rows
-KPI 1: Overnight guests · KPI 2: Hotel revenue · KPI 3: Occupancy
-Footer note: "Source: DCT conflict-adjusted model · 2026"
-
-RIGHT PANEL (52% width, dark #1a1a1a background):
-Header: "SIGNAL CONVERGENCE" in coral small caps.
-Three signal inputs at top, each in a coloured rounded box:
-Box 1 (coral): Globe icon · "Recovery Curves" · "4 peer markets · 12–30% decline"
-Box 2 (crimson): Plane icon · "Seat Connectivity" · "AUH supply contracted sharply"
-Box 3 (green): Speech bubble icon · "Net Sentiment" · "Fell across all source markets"
-Three arrows/lines flowing DOWN from the three boxes, converging into a single wide funnel shape pointing to:
-OUTPUT BOX (full width, coral border, dark fill): Large white "-XX%" centred. Below: "CONFLICT-ADJUSTED REVISION · ALL SIGNALS INDEPENDENTLY CONFIRM"
-
-DCT geometric ornament top-right (on the dark panel). Clean, no clutter.
-
-${CONTENT}
-${DCT}`
+${DCT_RULES}`
   }
 ];
 
-// Build UI
 const grid = document.getElementById('grid');
 DESIGNS.forEach((d, i) => {
   const block = document.createElement('div');
@@ -270,7 +254,7 @@ DESIGNS.forEach((d, i) => {
       <div class="placeholder"><div class="placeholder-txt">Waiting…</div></div>
     </div>
     <div class="dl-row">
-      <button class="btn-dl" id="dl${d.id}" onclick="dlImg(${d.id})">↓ Download Design ${d.id} — ${d.name}</button>
+      <button class="btn-dl" id="dl${d.id}" onclick="dlImg(${d.id})">↓ Download ${d.name}</button>
     </div>
     ${i < DESIGNS.length - 1 ? '<div class="divider"></div>' : ''}
   `;
@@ -282,10 +266,10 @@ async function startGen() {
   if (!key) { setStatus(0, '⚠ Paste your OpenAI key first.'); return; }
   done = 0;
   document.getElementById('btnGen').disabled = true;
-  setStatus(0, 'Firing all 5 designs in parallel…');
+  setStatus(0, 'Generating both variants in parallel…');
   DESIGNS.forEach(d => setLoading(d.id));
   await Promise.allSettled(DESIGNS.map(d => gen(d.id, d.prompt, key)));
-  const msg = done === TOTAL ? `✓ All ${TOTAL} designs ready. Tap any download button to save.` : `Done — ${done}/${TOTAL} succeeded. Tap Retry on any that failed.`;
+  const msg = done === TOTAL ? '✓ Both variants ready — tap download to save.' : `Done — ${done}/${TOTAL} succeeded.`;
   setStatus(100, msg);
   document.getElementById('btnGen').disabled = false;
 }
@@ -299,31 +283,27 @@ async function gen(id, prompt, key, isRetry = false) {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      if (res.status === 401) { DESIGNS.forEach(d => setErr(d.id, 'Invalid API key.', d.prompt, key)); setStatus(null, '✗ Invalid API key.'); document.getElementById('btnGen').disabled = false; return; }
+      if (res.status === 401) { DESIGNS.forEach(d => setErr(d.id, 'Invalid API key.')); setStatus(null, '✗ Invalid API key.'); document.getElementById('btnGen').disabled = false; return; }
       if (res.status === 429 && !isRetry) { await new Promise(r => setTimeout(r, 3500)); return gen(id, prompt, key, true); }
       throw new Error(err.error?.message || `HTTP ${res.status}`);
     }
     const data = await res.json();
     const url = `data:image/png;base64,${data.data[0].b64_json}`;
-    store[id] = url;
-    setImg(id, url);
-    done++;
-    setStatus(Math.round((done / TOTAL) * 100), `Generated ${done} of ${TOTAL} designs…`);
-  } catch(e) {
-    setErr(id, e.message || 'Unknown error — tap Retry.', prompt, key);
-  }
+    store[id] = url; setImg(id, url); done++;
+    setStatus(Math.round((done / TOTAL) * 100), `Generated ${done} of ${TOTAL}…`);
+  } catch(e) { setErr(id, e.message || 'Unknown error.'); }
 }
 
 function setLoading(id) {
-  document.getElementById(`f${id}`).innerHTML = `<div class="placeholder"><div class="spinner"></div><div class="placeholder-txt">Generating design ${id}…</div></div>`;
-  const btn = document.getElementById(`dl${id}`); btn.classList.remove('ready');
+  document.getElementById(`f${id}`).innerHTML = `<div class="placeholder"><div class="spinner"></div><div class="placeholder-txt">Generating…</div></div>`;
+  document.getElementById(`dl${id}`).classList.remove('ready');
 }
 function setImg(id, url) {
-  document.getElementById(`f${id}`).innerHTML = `<img src="${url}" alt="Design ${id}">`;
-  const btn = document.getElementById(`dl${id}`); btn.classList.add('ready');
+  document.getElementById(`f${id}`).innerHTML = `<img src="${url}" alt="Variant ${id}">`;
+  document.getElementById(`dl${id}`).classList.add('ready');
 }
-function setErr(id, msg, prompt, key) {
-  document.getElementById(`f${id}`).innerHTML = `<div class="err-box"><div class="err-msg">✗ ${msg}</div><button class="btn-retry" onclick="gen(${id}, DESIGNS[${id-1}].prompt, document.getElementById('apikey').value.trim())">Retry Design ${id}</button></div>`;
+function setErr(id, msg) {
+  document.getElementById(`f${id}`).innerHTML = `<div class="err-box"><div class="err-msg">✗ ${msg}</div><button class="btn-retry" onclick="gen(${id}, DESIGNS[${id-1}].prompt, document.getElementById('apikey').value.trim())">Retry</button></div>`;
 }
 function setStatus(pct, msg) {
   if (pct !== null) document.getElementById('pBar').style.width = pct + '%';
@@ -331,7 +311,7 @@ function setStatus(pct, msg) {
 }
 function dlImg(id) {
   if (!store[id]) return;
-  const a = document.createElement('a'); a.href = store[id]; a.download = `dct_design_${id}.png`;
+  const a = document.createElement('a'); a.href = store[id]; a.download = `dct_slide6_v${id}.png`;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
 </script>
